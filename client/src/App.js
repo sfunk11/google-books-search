@@ -1,6 +1,6 @@
 import React from "react";
-import Books from "./pages/Books";
-import Detail from "./pages/Detail";
+import Search from "./pages/Search";
+import Saved from "./pages/Saved";
 import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import Wrapper from "./components/Wrapper"
@@ -17,13 +17,10 @@ function App() {
       <Wrapper>
       <Switch>
           <Route exact path="/">
-            <Books />
+            <Search />
           </Route>
-          <Route exact path="/books">
-            <Books />
-          </Route>
-          <Route path="/books/:id">
-            <Detail />
+          <Route exact path="/saved">
+            <Saved />
           </Route>
           <Route path="*">
             <NoMatch />
