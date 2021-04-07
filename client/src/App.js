@@ -2,7 +2,7 @@ import React from "react";
 import Search from "./pages/Search";
 import Saved from "./pages/Saved";
 import NoMatch from "./pages/NoMatch";
-import Nav from "./components/Nav";
+import Navbar from "./components/Nav";
 import Wrapper from "./components/Wrapper"
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
@@ -13,7 +13,7 @@ function App() {
   return (
     <BrowserRouter>
     <div>
-      <Nav />
+      <Navbar />
       <Wrapper>
       <Switch>
           <Route exact path="/">
