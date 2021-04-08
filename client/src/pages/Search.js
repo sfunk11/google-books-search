@@ -1,21 +1,45 @@
 import React, { useState, useEffect } from "react";
-import Jumbotron from "../components/Jumbotron";
-import { Link } from "react-router-dom";
+import Header from "../components/Header";
 import { Col, Row, Container } from "../components/Grid";
+import SearchBar from "../components/SearchBar"
+import API from "../utils/API.js"
 
 
 function Search() {
+
+  const [bookState, setBookState] = useState({
+    bookSearch: "",
+    books:[]
+  });
+
+  const handleInputChange = event => {
+
+    const { value } = event.target;
+    setBookState ({ ...bookState, bookSearch: value });
+    
+  };
+  
+  
+  
+  const handleFormSubmit = event => {
+    event.preventDefault();
+    API.searchBooks(bookState.bookSearch)
+        .then(res => {
+          console.log(res.data)
+          setBookState({ bookSearch: "", books: res.data})
+          console.log(bookState)})
+        .catch(err => console.log(err));
+  
+  }
 
   return(
     <Container fluid>
     <Row>
       <Col size="12">
-        <Jumbotron>
-          <h1>(React) Google Books Search </h1>
-          <p> Search for and Save Books of Interest</p>
-        </Jumbotron>
+        <Header />
       </Col>
     </Row>
+    <SearchBar booksState={bookState} handleInputChange={handleInputChange} handleFormSubmit={handleFormSubmit} />
     </Container>
   )
 }
