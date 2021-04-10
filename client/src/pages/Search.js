@@ -1,47 +1,85 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
-import { Col, Row, Container } from "../components/Grid";
+import { Row, Container } from "../components/Grid";
 import SearchBar from "../components/SearchBar"
+import BookCard from "../components/BookCard"
 import API from "../utils/API.js"
 
 
-function Search() {
+const Search = () => {
+  const [bookSearch, setBookSearch] = useState("dragon"); 
+  const [books, setBooks] = useState([]);
 
-  const [bookState, setBookState] = useState({
-    bookSearch: "",
-    books:[]
-  });
+  useEffect(() => {
+      loadBooks()
+  }, []);
 
-  const handleInputChange = event => {
-
-    const { value } = event.target;
-    setBookState ({ ...bookState, bookSearch: value });
-    
+  function loadBooks() {
+      API.searchBooks(bookSearch)
+          .then(res =>
+              setBooks(res.data.items)
+          )
+          .catch(err => console.log(err));
   };
-  
-  
-  
-  const handleFormSubmit = event => {
-    event.preventDefault();
-    API.searchBooks(bookState.bookSearch)
-        .then(res => {
-          console.log(res.data)
-          setBookState({ bookSearch: "", books: res.data})
-          console.log(bookState)})
-        .catch(err => console.log(err));
-  
-  }
 
-  return(
-    <Container fluid>
-    <Row>
-      <Col size="12">
+  function handleInputChange(event) {
+      const { value } = event.target;
+      setBookSearch(value);
+  };
+
+  function handleFormSubmit(event) {
+      event.preventDefault();
+      if (bookSearch) {
+          loadBooks();
+          console.log(books);
+      };
+  };
+
+  function handleBookSubmit(book) {
+      if (book.title) {
+          API.saveBook(
+              {
+                  title: book.title,
+                  subtitle: book.subtitle,
+                  authors: book.authors,
+                  description: book.description,
+                  image: book.imageLinks.thumbnail,
+                  link: book.infoLink
+              }
+          )
+              .then(res => console.log(res))
+              .catch(err => console.log(err));
+      }
+  };
+
+  return (
+      <>
         <Header />
-      </Col>
-    </Row>
-    <SearchBar booksState={bookState} handleInputChange={handleInputChange} handleFormSubmit={handleFormSubmit} />
-    </Container>
-  )
+        <SearchBar handleInputChange={handleInputChange} 
+          handleFormSubmit={handleFormSubmit} 
+          bookSearch={bookSearch}
+         >
+        </SearchBar>
+          <section className="pt-5">
+              <Container>
+                  <h2>Search results</h2>
+                  <Row>
+
+                      {books
+                          ? books.map((book) => (
+                              <BookCard 
+                                  key={book.id} 
+                                  data={book.volumeInfo} 
+                                  page="search"
+                                  handleBookSubmit={handleBookSubmit}
+                                  />
+                          ))
+                          : null}
+                  </Row>
+              </Container>
+          </section>
+      </>
+  );
 }
 
 export default Search;

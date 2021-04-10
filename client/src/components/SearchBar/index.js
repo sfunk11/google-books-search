@@ -4,6 +4,7 @@ import { Input, FormBtn } from "../Form"
 
 
 
+
 function SearchBar(props) {
 
   return(
@@ -23,6 +24,7 @@ function SearchBar(props) {
     <Col size="2">
       <FormBtn
         onClick={props.handleFormSubmit}
+        value={props.bookSearch}
         type="success"
         className="input-lg"
       >
