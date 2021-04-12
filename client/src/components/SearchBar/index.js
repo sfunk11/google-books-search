@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row, Container } from "../Grid";
 import { Input, FormBtn } from "../Form"
-
+Search 
 
 
 
